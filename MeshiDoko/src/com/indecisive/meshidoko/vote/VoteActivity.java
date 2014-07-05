@@ -10,11 +10,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.indecisive.meshidoko.managers.VoteManager;
+
 public class VoteActivity extends Activity {
+	private VoteManager voteManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vote);
+		Intent myIntent = getIntent();
+		int peopleNum = myIntent.getIntExtra("peopleNum");
+		voteManager = new VoteManager(peopleNum);
 	}
 
 	public void onItemClick(View v) {
@@ -35,10 +42,24 @@ public class VoteActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(VoteActivity.this,
-								ResultActivity.class);
-						startActivity(intent);
-						VoteActivity.this.finish();
+						// TODO: refactor me
+						switch (v.getId()) {
+							case R.id.cand0:
+								voteManager.vote(0);
+								break;
+							case R.id.cand1:
+								voteManager.vote(1);
+								break;
+							case R.id.cand2:
+								voteManager.vote(2);
+								break;
+						}
+						if (voteManager.isVoteFinished()) {
+							Intent intent = new Intent(VoteActivity.this,
+									ResultActivity.class);
+							startActivity(intent);
+							VoteActivity.this.finish();
+						}
 					}
 				})
 				.setNegativeButton("キャンセル",
