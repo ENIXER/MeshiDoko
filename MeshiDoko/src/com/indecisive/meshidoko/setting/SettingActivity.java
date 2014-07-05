@@ -1,24 +1,33 @@
 package com.indecisive.meshidoko.setting;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.indecisive.meshidoko.R;
-import com.indecisive.meshidoko.vote.VoteActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.indecisive.meshidoko.R;
+import com.indecisive.meshidoko.adapters.GenreAdapter;
+import com.indecisive.meshidoko.models.Genre;
+import com.indecisive.meshidoko.vote.VoteActivity;
+
 public class SettingActivity extends Activity {
+
+	public static final int PEOPLE_NUM_MIN = 3;
+	public static final int PEOPLE_NUM_MAX = 10;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		String people[] = { "3人", "4人", "5人", "6人", "7人", "8人", "9人", "10人" };
+		ArrayList<String> people = new ArrayList<String>();
+		for (int i = PEOPLE_NUM_MIN; i <= PEOPLE_NUM_MAX; i++) {
+			people.add(Integer.toString(i));
+		}
 		ArrayAdapter<String> numAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, people);
 		numAdapter
@@ -26,12 +35,18 @@ public class SettingActivity extends Activity {
 		Spinner numSpinner = (Spinner) findViewById(R.id.num_of_people);
 		numSpinner.setAdapter(numAdapter);
 
-		List<String> genre = new ArrayList<String>();
-		genre.add("ラーメン");
-		genre.add("定食");
-		genre.add("カレー");
-		ArrayAdapter<String> genreAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, genre);
+		ArrayList<Genre> genreList = new ArrayList<Genre>();
+		Genre japanese = new Genre("G004", "和食");
+		Genre western = new Genre("G005", "洋食");
+		Genre chinese = new Genre("G007", "中華");
+		Genre ramen = new Genre("G013", "ラーメン");
+		genreList.add(japanese);
+		genreList.add(western);
+		genreList.add(chinese);
+		genreList.add(ramen);
+
+		GenreAdapter genreAdapter = new GenreAdapter(this,
+				android.R.layout.simple_spinner_item, genreList);
 		genreAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner spinner = (Spinner) findViewById(R.id.select_genre);
@@ -39,7 +54,16 @@ public class SettingActivity extends Activity {
 	}
 
 	public void onDecideButtonClick(View v) {
+		// 選択されているアイテムを取得
+		Spinner peopleSpinner = (Spinner) findViewById(R.id.num_of_people);
+		int peopleNum = Integer.parseInt((String) peopleSpinner
+				.getSelectedItem());
+		Spinner genreSpinner = (Spinner) findViewById(R.id.select_genre);
+		Genre genre = (Genre) genreSpinner.getSelectedItem();
+
 		Intent intent = new Intent(this, VoteActivity.class);
+		intent.putExtra("peopleNum", peopleNum);
+		intent.putExtra("genreCode", genre.getCode());
 		startActivity(intent);
 	}
 }

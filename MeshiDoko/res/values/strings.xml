@@ -4,7 +4,8 @@
     <string name="app_name">MeshiDoko</string>
     <string name="action_settings">Settings</string>
     <string name="decide">決定</string>
-    <string name="peoples">人数:</string>
+    <string name="people">人数:</string>
+    <string name="people_num">人</string>
     <string name="genre">ジャンル:</string>
 
 </resources>
