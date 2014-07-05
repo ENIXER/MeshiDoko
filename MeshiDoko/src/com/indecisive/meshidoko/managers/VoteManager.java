@@ -1,7 +1,7 @@
 package com.indecisive.meshidoko.managers;
 
 public class VoteManager {
-	private int[] voteTotals;
+	private int[] voteTotals = new int[3];
 	private int voteNum;
 
 	public VoteManager(int peopleNum) {
