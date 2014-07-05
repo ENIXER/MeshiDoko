@@ -1,16 +1,17 @@
 package com.indecisive.meshidoko.vote;
 
-import com.indecisive.meshidoko.R;
-import com.indecisive.meshidoko.result.ResultActivity;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.indecisive.meshidoko.R;
+import com.indecisive.meshidoko.managers.APIManager;
 import com.indecisive.meshidoko.managers.VoteManager;
+import com.indecisive.meshidoko.models.Restaurant;
 
 public class VoteActivity extends Activity {
 	private VoteManager voteManager;
@@ -25,6 +26,8 @@ public class VoteActivity extends Activity {
 		String genreCode = extras.getString("genreCode");
 		
 		// ジャンルコードを元にホットペッパーAPIを利用し、候補店舗をランダムに3つ取得する
+		APIManager apiManager = new APIManager(genreCode);
+		ArrayList<Restaurant> restaurantList = apiManager.search();
 		
 		voteManager = new VoteManager(peopleNum);
 	}
