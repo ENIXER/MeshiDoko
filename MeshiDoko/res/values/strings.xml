@@ -7,5 +7,6 @@
     <string name="people">人数:</string>
     <string name="people_num">人</string>
     <string name="genre">ジャンル:</string>
+    <string name="image">店舗画像</string>
 
 </resources>
