@@ -32,4 +32,15 @@ public class VoteManagerTest {
 			assertTrue(voteManager.getVoteTotalOfRestaurant(i) == 2); // FIXME: 2 is magic number
 		}
 	}
+
+	@Test
+	public void test_isVoteFinished() {
+		System.out.println("Test if isVoteFinished returns correct value...");
+		int peopleNum = 2;
+		VoteManager voteManager = new VoteManager(peopleNum);
+		voteManager.vote(0);
+		assertFalse(voteManager.isVoteFinished());
+		voteManager.vote(0);
+		assertTrue(voteManager.isVoteFinished());
+	}
 }
