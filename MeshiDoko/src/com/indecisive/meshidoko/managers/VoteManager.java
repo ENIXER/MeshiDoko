@@ -1,6 +1,9 @@
 package com.indecisive.meshidoko.managers;
 
-public class VoteManager {
+import java.io.Serializable;
+
+public class VoteManager implements Serializable{
+	private static final long serialVersionUID = -4734049795992977745L;
 	private int[] voteTotals = new int[3];
 	private int voteNum;
 	private int voteCount = 0;
