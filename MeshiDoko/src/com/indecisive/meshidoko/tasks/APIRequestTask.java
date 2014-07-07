@@ -3,65 +3,30 @@
  */
 package com.indecisive.meshidoko.tasks;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.indecisive.meshidoko.managers.APIManager;
+import java.util.ArrayList;
 
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.indecisive.meshidoko.managers.APIManager;
+import com.indecisive.meshidoko.models.Restaurant;
 
 /**
  * @author KOJISUKE
  * 
  */
-public class APIRequestTask extends AsyncTask<String, Integer, Integer> {
-
-	private String response;
-
-	public String getResponse() {
-		return this.response;
-	}
+public class APIRequestTask extends AsyncTask<String, Integer, ArrayList<Restaurant>> {
 
 	@Override
-	protected Integer doInBackground(String... contents) {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet(contents[0]);
+	protected ArrayList<Restaurant> doInBackground(String... contents) {
+		// ジャンルコードを元にAPI通信を行い、店をランダムに3つ取得するタスク
+		String genreCode = contents[0];
 
-		HttpResponse httpResponse = null;
-		try {
-			httpResponse = httpClient.execute(httpGet);
+		// APIManagerインスタンスの生成
+		APIManager apiManager = new APIManager(genreCode);
+		// TODO: レストランの検索(apiManager.search())
+		ArrayList<Restaurant> restaurantList = apiManager.search();
 
-			int status = httpResponse.getStatusLine().getStatusCode();
-
-			if (HttpStatus.SC_OK == status) {
-				try {
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-					httpResponse.getEntity().writeTo(outputStream);
-					this.response = outputStream.toString();
-				} catch (Exception e) {
-					Log.d("HttpSampleActivity", "Error");
-				}
-			} else {
-				Log.d("HttpSampleActivity", "Status" + status);
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		synchronized (APIManager.class) {
-			APIManager.class.notify();
-		}
-		return Integer.valueOf(httpResponse.getStatusLine().getStatusCode());
+		return restaurantList;
 	}
 
 }

@@ -3,18 +3,28 @@
  */
 package com.indecisive.meshidoko.managers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.xmlpull.v1.XmlPullParser;
+
 import android.util.Log;
+import android.util.Xml;
 
 import com.indecisive.meshidoko.models.Location;
 import com.indecisive.meshidoko.models.Restaurant;
-import com.indecisive.meshidoko.tasks.APIRequestTask;
 
 /**
  * @author KOJISUKE
@@ -27,6 +37,8 @@ public class APIManager {
 	private static final String URL_GOURMET_SEARCH = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/";
 
 	private String genreCode;
+	
+	private ArrayList<Restaurant> restaurantList;
 
 	public String getGenreCode() {
 		return genreCode;
@@ -36,19 +48,29 @@ public class APIManager {
 		this.genreCode = genreCode;
 	}
 
+	public ArrayList<Restaurant> getRestaurantList() {
+		return restaurantList;
+	}
+
+	public void setRestaurantList(ArrayList<Restaurant> restaurantList) {
+		this.restaurantList = restaurantList;
+	}
+
 	public APIManager(String genreCode) {
 		this.genreCode = genreCode;
 	}
 
 	public ArrayList<Restaurant> search() {
-		ArrayList<Restaurant> restaurantList = new ArrayList<Restaurant>();
 
 		try {
 			// 検索クエリの作成
 			HashMap<String, String> request = getRequest();
 			// 検索クエリを元にAPIを利用し、レスポンスを取得する
 			String response = getResponse(URL_GOURMET_SEARCH, request);
-			Log.d("hoge", "hoge");
+			// レスポンスを整形し、候補店舗情報を取得する
+			parse(response);
+
+			return restaurantList;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,7 +79,7 @@ public class APIManager {
 			e.printStackTrace();
 		}
 
-		return restaurantList;
+		return null;
 	}
 
 	/**
@@ -71,12 +93,12 @@ public class APIManager {
 		Location location = new Location();
 
 		try {
+			// 検索範囲はデフォルト(=1000m)
 			request.put("genre", URLEncoder.encode(genreCode, WEB_ENCODE_UTF8));
 			request.put("lat", URLEncoder.encode(
 					Double.toString(location.getLatitude()), WEB_ENCODE_UTF8));
 			request.put("lng", URLEncoder.encode(
 					Double.toString(location.getLongitude()), WEB_ENCODE_UTF8));
-			// 検索範囲はデフォルト(=1000m)
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -104,83 +126,58 @@ public class APIManager {
 			requestURL.append("&" + key + "=" + value);
 		}
 
-		APIRequestTask apiTask = new APIRequestTask();
-		apiTask.execute(requestURL.toString());
-		
-		synchronized (this) 
-        {
-            try 
-            {
-                this.wait();
-            } catch (InterruptedException e) { e.printStackTrace(); }
-        }
+		// 非同期処理でAPI通信を行う
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(requestURL.toString());
 
-		return apiTask.getResponse();
+		HttpResponse httpResponse = null;
+		try {
+			httpResponse = httpClient.execute(httpGet);
 
-		// URL urlObj = new URL(requestURL.toString());
-		// URLConnection connection = urlObj.openConnection();
-		// HttpURLConnection http = (HttpURLConnection) urlObj.openConnection();
-		// connection.setDoInput(true);
-		// http.setRequestMethod("GET");
-		// http.connect();
+			int status = httpResponse.getStatusLine().getStatusCode();
 
-		// HttpClient httpClient = new DefaultHttpClient();
-		// HttpGet httpGet = new HttpGet(requestURL.toString());
-		//
-		// HttpResponse httpResponse = null;
-		// try {
-		// httpResponse = httpClient.execute(httpGet);
-		//
-		// int status = httpResponse.getStatusLine().getStatusCode();
-		//
-		// if (HttpStatus.SC_OK == status) {
-		// try {
-		// ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		// httpResponse.getEntity().writeTo(outputStream);
-		// return outputStream.toString();
-		// } catch (Exception e) {
-		// Log.d("HttpSampleActivity", "Error");
-		// }
-		// } else {
-		// Log.d("HttpSampleActivity", "Status" + status);
-		// }
-		// } catch (ClientProtocolException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
+			if (HttpStatus.SC_OK == status) {
+				try {
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					httpResponse.getEntity().writeTo(outputStream);
+					return outputStream.toString();
+				} catch (Exception e) {
+					Log.d("APIManager", "Error");
+				}
+			} else {
+				Log.d("APIManager", "Status: " + status);
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		// System.out.println(http.getResponseCode());
-		// System.out.println(http.getResponseMessage());
-		//
-		// Map<String, List<String>> headerFields = http.getHeaderFields();
-		// Iterator<String> headerIt = headerFields.keySet().iterator();
-		// while (headerIt.hasNext()) {
-		// String key = headerIt.next();
-		// List<String> valList = headerFields.get(key);
-		// if (key != null) {
-		// StringBuilder sb = new StringBuilder();
-		// for (String val : valList) {
-		// if (sb.length() > 0)
-		// sb.append("\n");
-		// sb.append(val);
-		// }
-		// // System.out.println(key + " : " + sb.toString());
-		// }
-		// }
-		//
-		// // ボディ(コンテンツ)の取得
-		// InputStream is = http.getInputStream();
-		// BufferedReader reader = new BufferedReader(new InputStreamReader(is,
-		// WEB_ENCODE_UTF8));
-		// StringBuilder sbBody = new StringBuilder();
-		// String s;
-		// while ((s = reader.readLine()) != null) {
-		// sbBody.append(s);
-		// sbBody.append("\n");
-		// }
-		// System.out.println(sbBody.toString());
-		//
-		// return http.toString();
+		return "";
+	}
+
+	/**
+	 * レスポンス(XML形式)をパースする
+	 * 
+	 * @param str
+	 */
+	void parse(String str) {
+
+		try {
+			XmlPullParser xmlPullParser = Xml.newPullParser();
+			xmlPullParser.setInput(new StringReader(str));
+
+			int eventType;
+			while ((eventType = xmlPullParser.next()) != XmlPullParser.END_DOCUMENT) {
+				if (eventType == XmlPullParser.START_TAG
+						&& "title".equals(xmlPullParser.getName())) {
+					Log.d("APIManager", xmlPullParser.nextText());
+				}
+			}
+			// TODO: 取得結果をパースしてrestaurantListに入れる
+			
+		} catch (Exception e) {
+			Log.d("APIManager", "Error: parse");
+		}
 	}
 }
