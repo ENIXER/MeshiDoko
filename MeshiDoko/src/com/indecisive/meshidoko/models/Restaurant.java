@@ -1,18 +1,15 @@
 package com.indecisive.meshidoko.models;
 
-import java.util.ArrayList;
 
 public class Restaurant {
-	
+
 	private int id;
-	
+
 	private String name;
-	
+
 	private String address;
-	
+
 	private String imageUrl;
-	
-	private ArrayList<Genre> genreList;
 
 	public int getId() {
 		return id;
@@ -46,15 +43,10 @@ public class Restaurant {
 		this.imageUrl = imageUrl;
 	}
 
-	public ArrayList<Genre> getGenreList() {
-		return genreList;
-	}
-
-	public void setGenreList(ArrayList<Genre> genreList) {
-		this.genreList = genreList;
-	}
-	
-	public Restaurant() {
-		// TODO: 中身
+	public Restaurant(int id, String name, String address, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.imageUrl = imageUrl;
 	}
 }

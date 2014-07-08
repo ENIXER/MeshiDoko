@@ -6,16 +6,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.indecisive.meshidoko.R;
-import com.indecisive.meshidoko.managers.APIManager;
 import com.indecisive.meshidoko.managers.VoteManager;
 import com.indecisive.meshidoko.models.Restaurant;
 import com.indecisive.meshidoko.tasks.APIRequestTask;
 
 public class VoteActivity extends Activity {
 	private VoteManager voteManager;
+
+	private static final int RESTAURANT_NUM = 3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,9 @@ public class VoteActivity extends Activity {
 			@Override
 			protected void onPostExecute(ArrayList<Restaurant> result) {
 				if (result != null) {
-					for (Restaurant restaurant : result) {
-						// TODO: 取得した3つの候補店舗の情報を画面に出力する
-					}
+					// ランダムに3つ店を選ぶ
+					ArrayList<Restaurant> restaurantList = getRestaurantListAtRandom(result);
+					// TODO: 店情報を表示する
 				}
 			}
 		}.execute(genreCode);
@@ -47,5 +49,31 @@ public class VoteActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("店舗情報");
 
+	}
+
+	/**
+	 * 候補店リストから3つランダムに取得する
+	 * 
+	 * @param restaurantList
+	 * @return
+	 */
+	private ArrayList<Restaurant> getRestaurantListAtRandom(
+			ArrayList<Restaurant> restaurantList) {
+		ArrayList<Restaurant> ret = new ArrayList<Restaurant>();
+		ArrayList<Integer> idList = new ArrayList<Integer>();
+		int num = restaurantList.size();
+		if (num >= RESTAURANT_NUM) {
+			while (ret.size() < 3) {
+				// ランダムに3つ店舗を選ぶ
+				int id = (int) Math.floor(Math.random() * num);
+				if (!idList.contains(id)) {
+					Restaurant restaurant = restaurantList.get(id);
+					ret.add(restaurant);
+					idList.add(id);
+				}
+			}
+		}
+
+		return ret;
 	}
 }

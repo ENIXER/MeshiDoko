@@ -23,7 +23,7 @@ public class APIRequestTask extends AsyncTask<String, Integer, ArrayList<Restaur
 
 		// APIManagerインスタンスの生成
 		APIManager apiManager = new APIManager(genreCode);
-		// TODO: レストランの検索(apiManager.search())
+		// レストランの検索(apiManager.search())
 		ArrayList<Restaurant> restaurantList = apiManager.search();
 
 		return restaurantList;
