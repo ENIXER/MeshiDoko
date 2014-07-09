@@ -5,10 +5,12 @@ package com.indecisive.meshidoko.tasks;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.indecisive.meshidoko.managers.APIManager;
 import com.indecisive.meshidoko.models.Restaurant;
+import com.indecisive.meshidoko.vote.VoteActivity;
 
 /**
  * @author KOJISUKE
@@ -16,6 +18,8 @@ import com.indecisive.meshidoko.models.Restaurant;
  */
 public class APIRequestTask extends AsyncTask<String, Integer, ArrayList<Restaurant>> {
 
+	private ProgressDialog waitDialog;
+	
 	@Override
 	protected ArrayList<Restaurant> doInBackground(String... contents) {
 		// ジャンルコードを元にAPI通信を行い、店をランダムに3つ取得するタスク

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,16 @@ public class VoteActivity extends Activity {
 
 		// ジャンルコードを元にホットペッパーAPIを利用し、候補店舗をランダムに3つ取得する
 		new APIRequestTask() {
+			private ProgressDialog progressDialog;
+			@Override
+			protected void onPreExecute(){
+				super.onPreExecute();
+				progressDialog = new ProgressDialog(VoteActivity.this);
+				progressDialog.setMessage("読み込み中");
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.show();
+			}
+			
 			@Override
 			protected void onPostExecute(ArrayList<Restaurant> result) {
 				if (result != null) {
@@ -52,7 +63,8 @@ public class VoteActivity extends Activity {
 					idList[2] = R.id.cand2;
 					
 					if(restaurantList != null){
-					// TODO: 店情報を表示する
+						progressDialog.dismiss();
+						progressDialog = null;
 						int i = 0;
 						for(Restaurant restaurant : restaurantList){
 							FrameLayout cand = (FrameLayout)findViewById(idList[i++]);
