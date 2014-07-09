@@ -5,8 +5,10 @@ package com.indecisive.meshidoko.managers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.indecisive.meshidoko.models.Location;
@@ -209,13 +213,17 @@ public class APIManager {
 									if (eventType == XmlPullParser.TEXT) {
 										name = xmlPullParser.getText();
 									}
-								} else if ("".equals(address)
+								} else if ("".equals(imageUrl)
 										&& eventType == XmlPullParser.START_TAG
-										&& "logo_image".equals(xmlPullParser
+										&& "pc".equals(xmlPullParser
 												.getName())) {
 									eventType = xmlPullParser.next();
-									if (eventType == XmlPullParser.TEXT) {
-										imageUrl = xmlPullParser.getText();
+									if(eventType == XmlPullParser.START_TAG
+											&& "l".equals(xmlPullParser.getName())){
+										eventType = xmlPullParser.next();
+										if (eventType == XmlPullParser.TEXT) {
+											imageUrl = xmlPullParser.getText();
+										}
 									}
 								} else if ("".equals(address)
 										&& eventType == XmlPullParser.START_TAG
@@ -232,6 +240,10 @@ public class APIManager {
 						}
 						// </shop>
 						Restaurant restaurant = new Restaurant(count, name, address, imageUrl);
+						URL url = new URL(restaurant.getImageUrl());
+						InputStream is = url.openStream();
+						Bitmap bmp = BitmapFactory.decodeStream(is);
+						restaurant.setImage(bmp);
 						restaurantList.add(restaurant);
 						count++;
 					}
