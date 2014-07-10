@@ -1,18 +1,19 @@
 package com.indecisive.meshidoko.models;
 
-import java.util.ArrayList;
+import android.graphics.Bitmap;
+
 
 public class Restaurant {
-	
+
 	private int id;
-	
+
 	private String name;
-	
+
 	private String address;
-	
+
 	private String imageUrl;
 	
-	private ArrayList<Genre> genreList;
+	private Bitmap image;
 
 	public int getId() {
 		return id;
@@ -45,16 +46,20 @@ public class Restaurant {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-
-	public ArrayList<Genre> getGenreList() {
-		return genreList;
-	}
-
-	public void setGenreList(ArrayList<Genre> genreList) {
-		this.genreList = genreList;
+	
+	public Bitmap getImage(){
+		return image;
 	}
 	
-	public Restaurant() {
-		// TODO: 中身
+	public void setImage(Bitmap image){
+		this.image = image;
+	}
+
+	public Restaurant(int id, String name, String address, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.imageUrl = imageUrl;
+		this.image = null;
 	}
 }

@@ -9,29 +9,38 @@ package com.indecisive.meshidoko.models;
  */
 public class Location {
 
+	/** 西早稲田キャンパス - 緯度 */
+	private static final double LAT_NISHIWASEDA = 35.706069;
+	/** 西早稲田キャンパス - 経度 */
+	private static final double LNG_NISHIWASEDA = 139.70681;
+
 	/** 緯度 */
-	private float latitude;
+	private double latitude;
 
 	/** 経度 */
-	private float longitude;
+	private double longitude;
 
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public Location(float latitude, float longitude) {
+	public Location() {
+		this(LAT_NISHIWASEDA, LNG_NISHIWASEDA);
+	}
+
+	public Location(double latitude, double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

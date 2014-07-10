@@ -16,7 +16,6 @@ public class VoteManager implements Serializable {
 
 	public VoteManager(int peopleNum) {
 		voteNum = peopleNum;
-		restaurants.add(new Restaurant());
 	}
 
 	// restaurantId is 0 ~ 2 for now because there are only 3 restaurants
