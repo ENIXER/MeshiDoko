@@ -25,7 +25,7 @@ public class VoteActivity extends Activity {
 	private int selected;
 
 	private static final int RESTAURANT_NUM = 3;
-	
+
 	private ArrayList<Restaurant> restaurantList;
 
 	@Override
@@ -43,34 +43,39 @@ public class VoteActivity extends Activity {
 		// ジャンルコードを元にホットペッパーAPIを利用し、候補店舗をランダムに3つ取得する
 		new APIRequestTask() {
 			private ProgressDialog progressDialog;
+
 			@Override
-			protected void onPreExecute(){
+			protected void onPreExecute() {
 				super.onPreExecute();
 				progressDialog = new ProgressDialog(VoteActivity.this);
 				progressDialog.setMessage("読み込み中");
+				progressDialog.setCancelable(false);
 				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progressDialog.show();
 			}
-			
+
 			@Override
 			protected void onPostExecute(ArrayList<Restaurant> result) {
 				if (result != null) {
 					// ランダムに3つ店を選ぶ
 					restaurantList = getRestaurantListAtRandom(result);
+					voteManager.setRestaurants(restaurantList);
 					int[] idList = new int[3];
 					idList[0] = R.id.cand0;
 					idList[1] = R.id.cand1;
 					idList[2] = R.id.cand2;
-					
-					if(restaurantList != null){
+
+					if (restaurantList != null) {
 						progressDialog.dismiss();
 						progressDialog = null;
 						int i = 0;
-						for(Restaurant restaurant : restaurantList){
-							FrameLayout cand = (FrameLayout)findViewById(idList[i++]);
-							ImageView iv = (ImageView)cand.findViewById(R.id.store_image);
+						for (Restaurant restaurant : restaurantList) {
+							FrameLayout cand = (FrameLayout) findViewById(idList[i++]);
+							ImageView iv = (ImageView) cand
+									.findViewById(R.id.store_image);
 							iv.setImageBitmap(restaurant.getImage());
-							TextView tv = (TextView)cand.findViewById(R.id.store_name);
+							TextView tv = (TextView) cand
+									.findViewById(R.id.store_name);
 							tv.setText(restaurant.getName());
 							cand.setOnClickListener(new OnClickListener() {
 								@Override
@@ -91,15 +96,18 @@ public class VoteActivity extends Activity {
 		builder.setTitle("店舗情報");
 		switch (v.getId()) {
 		case R.id.cand0:
-			builder.setMessage(restaurantList.get(0).getName() + "\n" + restaurantList.get(0).getAddress());
+			builder.setMessage(restaurantList.get(0).getName() + "\n"
+					+ restaurantList.get(0).getAddress());
 			selected = 0;
 			break;
 		case R.id.cand1:
-			builder.setMessage(restaurantList.get(1).getName() + "\n" + restaurantList.get(1).getAddress());
+			builder.setMessage(restaurantList.get(1).getName() + "\n"
+					+ restaurantList.get(1).getAddress());
 			selected = 1;
 			break;
 		case R.id.cand2:
-			builder.setMessage(restaurantList.get(2).getName() + "\n" + restaurantList.get(2).getAddress());
+			builder.setMessage(restaurantList.get(2).getName() + "\n"
+					+ restaurantList.get(2).getAddress());
 			selected = 2;
 			break;
 		}

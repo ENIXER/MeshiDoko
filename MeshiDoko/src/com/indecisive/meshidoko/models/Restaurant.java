@@ -1,9 +1,14 @@
 package com.indecisive.meshidoko.models;
 
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+public class Restaurant implements Serializable {
 
-public class Restaurant {
+	private static final long serialVersionUID = 5861556354097654856L;
 
 	private int id;
 
@@ -12,8 +17,25 @@ public class Restaurant {
 	private String address;
 
 	private String imageUrl;
-	
-	private Bitmap image;
+
+	transient private Bitmap image;
+
+	private byte[] mBitmapArray;
+
+	public final void serializeBitmap() {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.PNG, 100, bout);
+		mBitmapArray = bout.toByteArray();
+	}
+
+	public final Bitmap getSerializedImage() {
+		if (mBitmapArray == null) {
+			return null;
+		}
+		Bitmap bitmap = BitmapFactory.decodeByteArray(mBitmapArray, 0,
+				mBitmapArray.length);
+		return bitmap;
+	}
 
 	public int getId() {
 		return id;
@@ -46,13 +68,14 @@ public class Restaurant {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-	
-	public Bitmap getImage(){
+
+	public Bitmap getImage() {
 		return image;
 	}
-	
-	public void setImage(Bitmap image){
+
+	public void setImage(Bitmap image) {
 		this.image = image;
+		serializeBitmap();
 	}
 
 	public Restaurant(int id, String name, String address, String imageUrl) {

@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 
 import com.indecisive.meshidoko.managers.APIManager;
 import com.indecisive.meshidoko.models.Restaurant;
-import com.indecisive.meshidoko.vote.VoteActivity;
 
 /**
  * @author KOJISUKE

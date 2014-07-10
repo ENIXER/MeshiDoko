@@ -5,11 +5,11 @@
 
     <Button
         android:id="@+id/map_button"
-        android:text="Show google map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Show google map" />
 
     <TextView
         android:id="@+id/restaurant_name"
@@ -21,12 +21,14 @@
 
     <ImageView
         android:id="@+id/restaurant_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:padding="10dp"
         android:layout_above="@id/restaurant_name"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
-        android:contentDescription="@string/image" />
+        android:contentDescription="@string/image"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>
