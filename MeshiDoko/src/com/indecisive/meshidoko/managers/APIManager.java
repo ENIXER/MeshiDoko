@@ -72,9 +72,11 @@ public class APIManager {
 
 	public ArrayList<Restaurant> search() {
 
+		HashMap<String, String> request = new HashMap<String, String>();
+		
 		try {
 			// 検索クエリの作成
-			HashMap<String, String> request = getRequest();
+			request = getRequest();
 			// 検索クエリを元にAPIを利用し、レスポンスを取得する
 			String response = getResponse(URL_GOURMET_SEARCH, request);
 			// レスポンスを整形し、候補店舗情報を取得する
@@ -83,10 +85,16 @@ public class APIManager {
 			return restaurantList;
 		} catch (UnsupportedEncodingException e) {
 			// Auto-generated catch block
+			Log.d("APIManager", "Error:" + e);
 			e.printStackTrace();
 		} catch (IOException e) {
 			// Auto-generated catch block
+			Log.d("APIManager", "Error:" + e);
 			e.printStackTrace();
+		} finally {
+			if (request != null) {
+				request.clear();
+			}
 		}
 
 		return null;
@@ -123,6 +131,7 @@ public class APIManager {
 
 		} catch (UnsupportedEncodingException e) {
 			// Auto-generated catch block
+			Log.d("APIManager", "Error:" + e);
 			e.printStackTrace();
 		}
 
@@ -151,6 +160,7 @@ public class APIManager {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(requestURL.toString());
 
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		HttpResponse httpResponse = null;
 		try {
 			httpResponse = httpClient.execute(httpGet);
@@ -159,7 +169,6 @@ public class APIManager {
 
 			if (HttpStatus.SC_OK == status) {
 				try {
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 					httpResponse.getEntity().writeTo(outputStream);
 					return outputStream.toString();
 				} catch (Exception e) {
@@ -169,9 +178,15 @@ public class APIManager {
 				Log.d("APIManager", "Status: " + status);
 			}
 		} catch (ClientProtocolException e) {
+			Log.d("APIManager", "Error:" + e);
 			e.printStackTrace();
 		} catch (IOException e) {
+			Log.d("APIManager", "Error:" + e);
 			e.printStackTrace();
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
 		}
 
 		return "";
@@ -215,11 +230,11 @@ public class APIManager {
 									}
 								} else if ("".equals(imageUrl)
 										&& eventType == XmlPullParser.START_TAG
-										&& "pc".equals(xmlPullParser
-												.getName())) {
+										&& "pc".equals(xmlPullParser.getName())) {
 									eventType = xmlPullParser.next();
-									if(eventType == XmlPullParser.START_TAG
-											&& "l".equals(xmlPullParser.getName())){
+									if (eventType == XmlPullParser.START_TAG
+											&& "l".equals(xmlPullParser
+													.getName())) {
 										eventType = xmlPullParser.next();
 										if (eventType == XmlPullParser.TEXT) {
 											imageUrl = xmlPullParser.getText();
@@ -239,7 +254,8 @@ public class APIManager {
 							}
 						}
 						// </shop>
-						Restaurant restaurant = new Restaurant(count, name, address, imageUrl);
+						Restaurant restaurant = new Restaurant(count, name,
+								address, imageUrl);
 						URL url = new URL(restaurant.getImageUrl());
 						InputStream is = url.openStream();
 						Bitmap bmp = BitmapFactory.decodeStream(is);
