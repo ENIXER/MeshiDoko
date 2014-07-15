@@ -18,6 +18,22 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/store_image"
         android:padding="10dp"
-        android:text="店舗名" />
+        android:text="@string/store_name" />
+    <TextView
+        android:id="@+id/catch_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/store_image"
+        android:layout_below="@id/store_name"
+        android:padding="10dp"
+        android:text="@string/catch_copy" />
+    <TextView
+        android:id="@+id/required_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/store_image"
+        android:layout_below="@id/catch_copy"
+        android:padding="10dp"
+        android:text="@string/required_time" />
 
 </RelativeLayout>

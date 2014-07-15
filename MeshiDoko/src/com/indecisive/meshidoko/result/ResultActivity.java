@@ -25,8 +25,10 @@ public class ResultActivity extends Activity {
 		super.onResume();
 		Restaurant restaurant = voteManager.getVoteResult();
 		ImageView image = (ImageView) findViewById(R.id.restaurant_image);
-		image.setImageBitmap(restaurant.getSerializedImage());
+		image.setImageResource(restaurant.getResourceId());
 		TextView name = (TextView) findViewById(R.id.restaurant_name);
 		name.setText(restaurant.getName());
+		TextView address = (TextView) findViewById(R.id.restaurant_address);
+		address.setText(restaurant.getAddress());
 	}
 }

@@ -8,5 +8,8 @@
     <string name="people_num">人</string>
     <string name="genre">ジャンル:</string>
     <string name="image">店舗画像</string>
+    <string name="store_name">店舗名</string>
+    <string name="required_time">所要時間</string>
+    <string name="catch_copy">キャッチ</string>
 
 </resources>

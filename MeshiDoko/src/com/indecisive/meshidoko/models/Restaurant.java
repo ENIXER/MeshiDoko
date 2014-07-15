@@ -21,6 +21,12 @@ public class Restaurant implements Serializable {
 	transient private Bitmap image;
 
 	private byte[] mBitmapArray;
+	
+	private String catchCopy;
+	
+	private int resourceId;
+	
+	private int requiredTime;	// TODO: 緯度経度をフィールドとして持ち、所要時間はGoogleMapAPIを利用して取得するようにする
 
 	public final void serializeBitmap() {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -78,11 +84,45 @@ public class Restaurant implements Serializable {
 		serializeBitmap();
 	}
 
+	public String getCatchCopy() {
+		return catchCopy;
+	}
+
+	public void setCatchCopy(String catchCopy) {
+		this.catchCopy = catchCopy;
+	}
+
+	public int getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(int resourceId) {
+		this.resourceId = resourceId;
+	}
+
+	public int getRequiredTime() {
+		return requiredTime;
+	}
+
+	public void setRequiredTime(int requiredTime) {
+		this.requiredTime = requiredTime;
+	}
+
 	public Restaurant(int id, String name, String address, String imageUrl) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.imageUrl = imageUrl;
+		this.image = null;
+	}
+	
+	public Restaurant(int id, String name, String address, String catchCopy, int resourceId, int requiredTime) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.catchCopy = catchCopy;
+		this.resourceId = resourceId;
+		this.requiredTime = requiredTime;
 		this.image = null;
 	}
 }

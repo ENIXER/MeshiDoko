@@ -249,6 +249,7 @@ public class APIManager {
 										address = xmlPullParser.getText();
 									}
 								}
+								// TODO: お店キャッチを取得する(ない場合は空文字を入れる)
 								break;
 							}
 							}

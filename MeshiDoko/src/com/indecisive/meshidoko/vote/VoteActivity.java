@@ -26,7 +26,7 @@ public class VoteActivity extends Activity {
 
 	private static final int RESTAURANT_NUM = 3;
 
-	private ArrayList<Restaurant> restaurantList;
+	private ArrayList<Restaurant> restaurantList = new ArrayList<Restaurant>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,20 @@ public class VoteActivity extends Activity {
 
 		// 投票マネージャ
 		voteManager = new VoteManager(peopleNum);
+
+		if ("G004".equals(genreCode)) {
+			// TODO: ジャンルごとに...
+			setRamenRestaurantData();
+		} else if ("G005".equals(genreCode)) {
+			// TODO: ジャンルごとに...
+			setRamenRestaurantData();
+		} else if ("G007".equals(genreCode)) {
+			// TODO: ジャンルごとに...
+			setRamenRestaurantData();
+		} else if ("G013".equals(genreCode)) {
+			// TODO: ジャンルごとに...
+			setRamenRestaurantData();
+		}
 
 		// ジャンルコードを元にホットペッパーAPIを利用し、候補店舗をランダムに3つ取得する
 		new APIRequestTask() {
@@ -56,36 +70,70 @@ public class VoteActivity extends Activity {
 
 			@Override
 			protected void onPostExecute(ArrayList<Restaurant> result) {
-				if (result != null) {
-					// ランダムに3つ店を選ぶ
-					restaurantList = getRestaurantListAtRandom(result);
+				if (restaurantList != null) {
 					voteManager.setRestaurants(restaurantList);
 					int[] idList = new int[3];
 					idList[0] = R.id.cand0;
 					idList[1] = R.id.cand1;
 					idList[2] = R.id.cand2;
 
-					if (restaurantList != null) {
-						progressDialog.dismiss();
-						progressDialog = null;
-						int i = 0;
-						for (Restaurant restaurant : restaurantList) {
-							FrameLayout cand = (FrameLayout) findViewById(idList[i++]);
-							ImageView iv = (ImageView) cand
-									.findViewById(R.id.store_image);
-							iv.setImageBitmap(restaurant.getImage());
-							TextView tv = (TextView) cand
-									.findViewById(R.id.store_name);
-							tv.setText(restaurant.getName());
-							cand.setOnClickListener(new OnClickListener() {
-								@Override
-								public void onClick(View v) {
-									onItemClick(v);
-								}
-							});
-						}
+					progressDialog.dismiss();
+					progressDialog = null;
+					int i = 0;
+					for (Restaurant restaurant : restaurantList) {
+						FrameLayout cand = (FrameLayout) findViewById(idList[i++]);
+						ImageView iv = (ImageView) cand
+								.findViewById(R.id.store_image);
+						iv.setImageResource(restaurant.getResourceId());
+						TextView storeNameTV = (TextView) cand
+								.findViewById(R.id.store_name);
+						storeNameTV.setText(restaurant.getName());
+						TextView catchCopyTV = (TextView) cand
+								.findViewById(R.id.catch_copy);
+						catchCopyTV.setText(restaurant.getCatchCopy());
+						TextView requiredTimeTV = (TextView) cand
+								.findViewById(R.id.required_time);
+						requiredTimeTV.setText(String.valueOf(restaurant
+								.getRequiredTime() + "分"));
+						cand.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								onItemClick(v);
+							}
+						});
 					}
 				}
+
+				// if (result != null) {
+				// // ランダムに3つ店を選ぶ
+				// restaurantList = getRestaurantListAtRandom(result);
+				// voteManager.setRestaurants(restaurantList);
+				// int[] idList = new int[3];
+				// idList[0] = R.id.cand0;
+				// idList[1] = R.id.cand1;
+				// idList[2] = R.id.cand2;
+				//
+				// if (restaurantList != null) {
+				// progressDialog.dismiss();
+				// progressDialog = null;
+				// int i = 0;
+				// for (Restaurant restaurant : restaurantList) {
+				// FrameLayout cand = (FrameLayout) findViewById(idList[i++]);
+				// ImageView iv = (ImageView) cand
+				// .findViewById(R.id.store_image);
+				// iv.setImageBitmap(restaurant.getImage());
+				// TextView tv = (TextView) cand
+				// .findViewById(R.id.store_name);
+				// tv.setText(restaurant.getName());
+				// cand.setOnClickListener(new OnClickListener() {
+				// @Override
+				// public void onClick(View v) {
+				// onItemClick(v);
+				// }
+				// });
+				// }
+				// }
+				// }
 			}
 		}.execute(genreCode);
 
@@ -159,5 +207,18 @@ public class VoteActivity extends Activity {
 		}
 
 		return ret;
+	}
+
+	private void setRamenRestaurantData() {
+		Restaurant menzy = new Restaurant(1, "麺爺あぶら　西早稲田店", "東京都新宿区大久保2-2-13",
+				"油そば", R.drawable.menzy, 5);
+		Restaurant takatora = new Restaurant(2, "麺屋武蔵鷹虎　高田馬場店",
+				"東京都新宿区高田馬場2-19-7", "濃厚つけ麺", R.drawable.takatora, 12);
+		Restaurant junren = new Restaurant(3, "さっぽろ純連　東京店",
+				"東京都新宿区高田馬場3-12-8 高田馬場センタービル1F", "札幌ラーメン", R.drawable.junren,
+				18);
+		restaurantList.add(menzy);
+		restaurantList.add(takatora);
+		restaurantList.add(junren);
 	}
 }
