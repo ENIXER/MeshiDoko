@@ -1,18 +1,41 @@
 package com.indecisive.meshidoko.models;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
-public class Restaurant {
-	
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+public class Restaurant implements Serializable {
+
+	private static final long serialVersionUID = 5861556354097654856L;
+
 	private int id;
-	
+
 	private String name;
-	
+
 	private String address;
-	
+
 	private String imageUrl;
-	
-	private ArrayList<Genre> genreList;
+
+	transient private Bitmap image;
+
+	private byte[] mBitmapArray;
+
+	public final void serializeBitmap() {
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		image.compress(Bitmap.CompressFormat.PNG, 100, bout);
+		mBitmapArray = bout.toByteArray();
+	}
+
+	public final Bitmap getSerializedImage() {
+		if (mBitmapArray == null) {
+			return null;
+		}
+		Bitmap bitmap = BitmapFactory.decodeByteArray(mBitmapArray, 0,
+				mBitmapArray.length);
+		return bitmap;
+	}
 
 	public int getId() {
 		return id;
@@ -46,15 +69,20 @@ public class Restaurant {
 		this.imageUrl = imageUrl;
 	}
 
-	public ArrayList<Genre> getGenreList() {
-		return genreList;
+	public Bitmap getImage() {
+		return image;
 	}
 
-	public void setGenreList(ArrayList<Genre> genreList) {
-		this.genreList = genreList;
+	public void setImage(Bitmap image) {
+		this.image = image;
+		serializeBitmap();
 	}
-	
-	public Restaurant() {
-		// TODO: 中身
+
+	public Restaurant(int id, String name, String address, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.imageUrl = imageUrl;
+		this.image = null;
 	}
 }
