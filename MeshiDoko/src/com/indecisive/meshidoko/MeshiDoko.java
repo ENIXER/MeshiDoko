@@ -1,6 +1,6 @@
 package com.indecisive.meshidoko;
 
-import com.indecisive.meshidoko.setting.SettingActivity;
+import com.indecisive.meshidoko.views.SettingActivity;
 
 import android.app.Activity;
 import android.content.Intent;

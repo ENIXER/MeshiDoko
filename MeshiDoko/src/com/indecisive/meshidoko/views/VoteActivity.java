@@ -1,4 +1,4 @@
-package com.indecisive.meshidoko.vote;
+package com.indecisive.meshidoko.views;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.indecisive.meshidoko.R;
 import com.indecisive.meshidoko.managers.VoteManager;
 import com.indecisive.meshidoko.models.Restaurant;
-import com.indecisive.meshidoko.result.ResultActivity;
 import com.indecisive.meshidoko.tasks.APIRequestTask;
 
 public class VoteActivity extends Activity {

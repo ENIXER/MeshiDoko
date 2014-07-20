@@ -1,4 +1,4 @@
-package com.indecisive.meshidoko.result;
+package com.indecisive.meshidoko.views;
 
 import com.indecisive.meshidoko.R;
 import com.indecisive.meshidoko.managers.VoteManager;

@@ -1,4 +1,4 @@
-package com.indecisive.meshidoko.setting;
+package com.indecisive.meshidoko.views;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,6 @@ import android.widget.Spinner;
 import com.indecisive.meshidoko.R;
 import com.indecisive.meshidoko.adapters.GenreAdapter;
 import com.indecisive.meshidoko.models.Genre;
-import com.indecisive.meshidoko.vote.VoteActivity;
 
 public class SettingActivity extends Activity {
 

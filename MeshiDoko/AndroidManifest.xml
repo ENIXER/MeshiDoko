@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.indecisive.meshidoko.setting.SettingActivity" />
-        <activity android:name="com.indecisive.meshidoko.vote.VoteActivity" />
-        <activity android:name="com.indecisive.meshidoko.result.ResultActivity" />
+        <activity android:name="com.indecisive.meshidoko.views.SettingActivity" />
+        <activity android:name="com.indecisive.meshidoko.views.VoteActivity" />
+        <activity android:name="com.indecisive.meshidoko.views.ResultActivity" />
     </application>
 
 </manifest>
