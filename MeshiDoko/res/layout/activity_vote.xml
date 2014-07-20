@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vote_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -8,8 +9,7 @@
         android:id="@+id/cand0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1" >
 
         <include layout="@layout/vote_item" />
     </FrameLayout>
@@ -18,8 +18,7 @@
         android:id="@+id/cand1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1" >
 
         <include layout="@layout/vote_item" />
     </FrameLayout>
@@ -28,11 +27,9 @@
         android:id="@+id/cand2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1" >
 
-        <include layout="@layout/vote_item" 
-            />
+        <include layout="@layout/vote_item" />
     </FrameLayout>
 
 </LinearLayout>
